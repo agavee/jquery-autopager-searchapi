@@ -94,6 +94,7 @@
         return;
       }
 
+      setUrl();
       active = true;
       options.start(currentHash(), nextHash());
       $.get(nextUrl, insertContent);
@@ -137,9 +138,14 @@
   }
 
   function insertContent(res) {
+    if (typeof res === 'object') {
+      res = res.regions.search_api_ajax;
+    }
+
     var _options = options,
       nextPage = $('<div/>').append(res.replace(/<script(.|\s)*?\/script>/g, "")),
       nextContent = nextPage.find(_options.content);
+      nextPager = nextPage.find(_options.pager);
 
     set('page', _options.page + 1);
     setUrl(nextPage);
@@ -149,6 +155,7 @@
       } else {
         nextContent.appendTo(_options.appendTo);
       }
+      $(_options.pager).replaceWith(nextPager);
       _options.load.call(nextContent.get(), currentHash(), nextHash());
       content = nextContent.filter(':last');
     }
