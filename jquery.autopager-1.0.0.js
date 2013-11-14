@@ -90,11 +90,11 @@
     },
 
     load: function() {
+      setUrl();
       if (active || !nextUrl || options.disabled) {
         return;
       }
 
-      setUrl();
       active = true;
       options.start(currentHash(), nextHash());
       $.get(nextUrl, insertContent);
